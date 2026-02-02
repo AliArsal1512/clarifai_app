@@ -1,0 +1,35 @@
+# Core Flask
+Flask==3.1.0
+Werkzeug==3.1.3
+Jinja2==3.1.6
+
+# Flask Extensions
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+flask-cors==6.0.0
+
+# Database
+SQLAlchemy==2.0.41
+psycopg2-binary==2.9.7
+
+# ML/AI - Use CPU-only if memory issues
+torch==2.6.0  # Consider torch==2.6.0+cpu if 429MB is too large
+transformers==4.50.3
+sentencepiece==0.2.0
+tokenizers==0.21.1
+numpy==2.2.4
+
+# Hugging Face
+huggingface-hub==0.30.1
+
+# Utilities
+requests==2.32.3
+python-dotenv==1.0.0
+
+# Production Server
+gunicorn==21.2.0
+
+# Your specific dependencies
+javalang==0.13.0
+graphviz==0.21
+networkx==3.4.2

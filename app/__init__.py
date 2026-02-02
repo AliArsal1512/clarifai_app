@@ -1,6 +1,7 @@
 # app/__init__.py
 import os
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, logging, send_from_directory
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from .config import Config # We'll create this file next
@@ -22,6 +23,14 @@ def create_app(config_class=Config):
                 instance_relative_config=True) # For instance folder config
 
     app.config.from_object(config_class)
+     # Add CORS support
+    CORS(app)
+    
+    # Setup logging
+    logging.basicConfig(level=logging.INFO)
+    
+    # Debug database URL (remove in production if needed)
+    print(f"Database URI configured: {app.config['SQLALCHEMY_DATABASE_URI']}")
     app.config['UPLOAD_FOLDER'] = os.path.join(app.static_folder, 'cfg_images')
     # Create the folder if it doesn't exist
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -55,6 +64,16 @@ def create_app(config_class=Config):
     
     # Serve React app for all non-API routes (catch-all route - must be registered last)
     # This route only handles GET requests - POST requests go to API routes
+
+        # Health check for Render
+    @app.route('/api/health')
+    def health_check():
+        return jsonify({
+            'status': 'healthy',
+            'service': 'clarifai-fyp',
+            'database': 'configured'
+        }), 200
+    
     @app.route('/', defaults={'path': ''}, methods=['GET'])
     @app.route('/<path:path>', methods=['GET'])
     def serve_react_app(path):
@@ -78,11 +97,18 @@ def create_app(config_class=Config):
                     return send_from_directory(react_build_dir, path)
             
             # Serve index.html for React Router (SPA routing)
-            return send_from_directory(react_build_dir, 'index.html')
-        else:
-            # React build doesn't exist
-            from flask import abort
-            abort(404, description="React build not found. Please run 'npm run build' first.")
+            index_path = os.path.join(react_build_dir, 'index.html')
+            if os.path.exists(index_path):
+                return send_from_directory(react_build_dir, 'index.html')
+            else:
+                # React build doesn't exist
+                from flask import abort
+                abort(404, description="React build not found. Please run 'npm run build' first.")
+
+            # Fallback to any HTML file (Vite might have different structure)
+            for file in os.listdir(react_build_dir):
+                if file.endswith('.html'):
+                    return send_from_directory(react_build_dir, file)
 
     with app.app_context():
         db.create_all() # Create database tables
@@ -92,33 +118,26 @@ def create_app(config_class=Config):
         from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline as hf_pipeline
         import torch
 
-        MODEL_PATH = app.config.get("MODEL_PATH", "D:/uni/FYP2/SEBIS") # Get from config
-        DEVICE = 0 if torch.cuda.is_available() else -1
+        MODEL_ID = "aliarsal1512/clarifai_java_code_commenter"
+        DEVICE = -1
 
-        tokenizer = AutoTokenizer.from_pretrained(
-            MODEL_PATH,
-            model_max_length=64,  # Further reduced for faster processing
-            truncation=True,
-            padding="max_length"
-        )
-        model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_PATH)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+        model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_ID)
 
-        # Optimize for speed: use greedy decoding (num_beams=1) and shorter max_length
-        # Enable batch processing for faster inference
-        app.hf_pipeline = hf_pipeline( # Store the pipeline on the app object
+        app.hf_pipeline = hf_pipeline(
             "text2text-generation",
             model=model,
             tokenizer=tokenizer,
             device=DEVICE,
-            max_length=64,  # Further reduced for faster generation (comments are usually short)
-            truncation=True,
-            num_beams=1,  # Greedy decoding (faster than beam search with num_beams=4)
-            do_sample=False,  # Deterministic generation
-            early_stopping=True
+            max_length=64,
+            num_beams=1,
+            do_sample=False
         )
-        print("Hugging Face pipeline initialized successfully.")
+
+        print("✅ Hugging Face pipeline initialized")
+
     except Exception as e:
-        print(f"Model initialization error: {str(e)}")
+        print("❌ Model initialization error:", e)
         app.hf_pipeline = None
 
     return app

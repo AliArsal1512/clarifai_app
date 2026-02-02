@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: clarifai-fyp
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      npm install
+      npm run build
+      mkdir -p app/static/react-build
+      cp -r dist/* app/static/react-build/
+    startCommand: gunicorn run:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: clarifai-db
+          property: connectionString
+    healthCheckPath: /api/health
+    autoDeploy: true
+    plan: free
+
+databases:
+  - name: clarifai-db
+    databaseName: clarifai
+    user: clarifai_user
+    plan: free
