@@ -11,7 +11,7 @@ import multiprocessing
 from ..cfg_utils import CFGGenerator 
 from app.cfg_utils import CFGGenerator
 import javalang # For JavaSyntaxError
-from flask import app, request, jsonify, redirect, url_for, current_app, flash, send_from_directory
+from flask import Blueprint, app, request, jsonify, redirect, url_for, current_app, flash, send_from_directory
 from flask_login import login_required, current_user, logout_user
 from . import main_bp # from app/main/__init__.py
 from ..models import CodeSubmission, User # from app/models.py
@@ -20,6 +20,7 @@ from ..utils import ( # from app/utils.py
     preprocess_code, format_ast, clean_comment, detect_relationships,
     extract_methods, extract_classes, compute_hash, build_ast_json, wrap_code_if_needed
 )
+
 
 @main_bp.route('/generate-cfg', methods=['POST'])
 @login_required

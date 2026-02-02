@@ -1,13 +1,11 @@
 services:
+  # Backend Service (Python Flask)
   - type: web
-    name: clarifai-fyp
+    name: clarifai-backend
     env: python
     buildCommand: |
+      echo "Building Python backend..."
       pip install -r requirements.txt
-      npm install
-      npm run build
-      mkdir -p app/static/react-build
-      cp -r dist/* app/static/react-build/
     startCommand: gunicorn run:app
     envVars:
       - key: PYTHON_VERSION
@@ -20,9 +18,29 @@ services:
         fromDatabase:
           name: clarifai-db
           property: connectionString
+      # CORS: Allow frontend to access backend
+      - key: CORS_ORIGINS
+        value: "https://clarifai-frontend.onrender.com"  # Update after frontend deploys
     healthCheckPath: /api/health
-    autoDeploy: true
-    plan: free
+
+  # Frontend Service (React)
+  - type: web
+    name: clarifai-frontend
+    env: static
+    buildCommand: |
+      echo "Building React frontend..."
+      cd frontend
+      npm install
+      npm run build
+    staticPublishPath: ./frontend/dist
+    # Enable SPA routing
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: "https://clarifai-backend.onrender.com"  # Your backend URL
 
 databases:
   - name: clarifai-db
