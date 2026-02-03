@@ -5,11 +5,14 @@ services:
     env: python
     buildCommand: |
       echo "Building Python backend..."
+      cd backend
       pip install -r requirements.txt
-    startCommand: gunicorn run:app
+    startCommand: |
+      cd backend
+      gunicorn wsgi:app
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.10.13
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
@@ -32,7 +35,7 @@ services:
       cd frontend
       npm install
       npm run build
-    staticPublishPath: ./frontend/dist
+    staticPublishPath: frontend/dist
     # Enable SPA routing
     routes:
       - type: rewrite
