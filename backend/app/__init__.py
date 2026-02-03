@@ -47,13 +47,6 @@ def create_app(config_class=Config):
     def load_user(user_id):
         return User.query.get(int(user_id))
     
-    # Register blueprints
-    from .auth.routes import auth_bp
-    from .main.routes import main_bp
-    
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(main_bp)
-    
     # Add API route for checking authentication
     @app.route('/api/check-auth')
     def check_auth():
