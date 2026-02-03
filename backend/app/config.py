@@ -5,13 +5,16 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or '151214'
+    DATABASE_URL = os.environ.get('DATABASE_URL')
     
-    # Use SQLite in /tmp directory for Render
-    if os.environ.get('RENDER'):
-        # On Render, use /tmp directory (persists only during service runtime)
-        SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/clarifai.db'
+    if DATABASE_URL:
+        # Fix for SQLAlchemy - change postgres:// to postgresql://
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
-        # Local development
+        # Fallback to SQLite (local development)
+        base_dir = os.path.abspath(os.path.dirname(__file__))
         SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, '..', 'users.db')
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
