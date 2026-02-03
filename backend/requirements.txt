@@ -10,7 +10,7 @@ flask-cors==6.0.0
 
 # Database
 SQLAlchemy==2.0.41
-psycopg2-binary==2.9.7
+psycopg2-binary==2.9.9
 
 # ML/AI - Use CPU-only if memory issues
 torch==2.6.0  # Consider torch==2.6.0+cpu if 429MB is too large
