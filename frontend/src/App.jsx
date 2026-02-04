@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Settings from './pages/Settings';
 import './App.css';
+import config from './config';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,7 +23,7 @@ function App() {
   const checkAuth = async () => {
     try {
       // Check authentication status via API
-      const response = await fetch('/api/check-auth', {
+      const response = await fetch(`${config.apiBaseUrl}/check-auth`, {
         credentials: 'include',
       });
       if (response.ok) {

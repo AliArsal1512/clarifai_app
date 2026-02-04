@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import config from './config';
 
 const Signup = ({ onSignup }) => {
   const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const Signup = ({ onSignup }) => {
       formData.append('email', email.trim());
       formData.append('password', password);
 
-      const response = await fetch('/auth/signup', {
+      const response = await fetch(`${config.apiBaseUrl}/auth/signup`, {
         method: 'POST',
         credentials: 'include',
         body: formData,

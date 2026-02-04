@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CFGVisualization.css';
+import config from './config';
 
 const CFGVisualization = ({ code, editorRef, theme, isLoading, setIsLoading }) => {
   const [cfgSvg, setCfgSvg] = useState(null);
@@ -28,7 +29,7 @@ const CFGVisualization = ({ code, editorRef, theme, isLoading, setIsLoading }) =
     setCfgSvg(null);
 
     try {
-      const response = await fetch('/generate-cfg', {
+      const response = await fetch(`${config.apiBaseUrl}/generate-cfg`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

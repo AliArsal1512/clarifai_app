@@ -5,6 +5,7 @@ import ASTVisualization from '../components/ASTVisualization';
 import CFGVisualization from '../components/CFGVisualization';
 import FileSidebar from '../components/FileSidebar';
 import './Model.css';
+import config from './config';
 
 const Model = () => {
   const { theme } = useTheme();
@@ -78,7 +79,7 @@ const Model = () => {
     setIsGraphicalView(false);
 
     try {
-      const response = await fetch('/', {
+      const response = await fetch(`${config.apiBaseUrl}/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -93,7 +94,7 @@ const Model = () => {
       // Load AST JSON for graphical view
       if (data.cfg_supported) {
         try {
-          const astResponse = await fetch('/ast-json', {
+          const astResponse = await fetch(`${config.apiBaseUrl}/ast-json`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',

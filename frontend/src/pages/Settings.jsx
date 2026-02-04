@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Settings.css';
+import config from './config';
 
 const Settings = () => {
   const [password, setPassword] = useState('');
@@ -24,7 +25,7 @@ const Settings = () => {
       const formData = new FormData();
       formData.append('password', password);
 
-      const response = await fetch('/delete-account', {
+      const response = await fetch(`${config.apiBaseUrl}/delete-account`, {
         method: 'POST',
         credentials: 'include',
         body: formData,

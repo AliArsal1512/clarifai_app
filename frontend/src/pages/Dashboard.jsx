@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import { useTheme } from '../contexts/ThemeContext';
 import './Dashboard.css';
+import config from './config';
 
 const Dashboard = () => {
   const { theme } = useTheme();
@@ -22,7 +23,7 @@ const Dashboard = () => {
 
   const fetchSubmissions = async () => {
     try {
-      const response = await fetch('/api/dashboard', {
+      const response = await fetch(`${config.apiBaseUrl}/dashboard`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -51,7 +52,7 @@ const Dashboard = () => {
   const loadSubmission = async (submissionId) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/get-submission/${submissionId}`, {
+      const response = await fetch(`${config.apiBaseUrl}/get-submission/${submissionId}`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -78,7 +79,7 @@ const Dashboard = () => {
     }
 
     try {
-      const response = await fetch(`/delete-submission/${submissionId}`, {
+      const response = await fetch(`${config.apiBaseUrl}/delete-submission/${submissionId}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -175,7 +176,7 @@ const Dashboard = () => {
 
   const renameSubmission = async (submissionId, newName) => {
     try {
-      const response = await fetch(`/rename-submission/${submissionId}`, {
+      const response = await fetch(`${config.apiBaseUrl}/rename-submission/${submissionId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

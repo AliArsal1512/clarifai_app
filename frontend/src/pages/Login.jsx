@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import config from './config';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ const Login = ({ onLogin }) => {
       formData.append('username', username);
       formData.append('password', password);
 
-      const response = await fetch('/auth/login', {
+      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         body: formData,
