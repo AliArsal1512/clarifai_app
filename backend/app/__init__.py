@@ -25,11 +25,7 @@ def create_app(config_class=Config):
     # IMPORTANT: Configure CORS for frontend service
     # Allow frontend service to access backend API
     cors_origins = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')
-    CORS(
-        app,
-        supports_credentials=True,
-        origins=os.getenv("CORS_ORIGINS").split(",")
-    )
+    CORS(app, supports_credentials=True, origins=cors_origins.split(',') if ',' in cors_origins else cors_origins)
 
     # Register blueprints/routes
     # Register blueprints
