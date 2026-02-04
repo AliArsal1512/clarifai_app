@@ -296,7 +296,7 @@ def home():
 # Dashboard route removed - handled by React Router
 # Use /api/dashboard for API data
 
-@main_bp.route('/api/dashboard')
+@main_bp.route('/dashboard')
 @login_required
 def api_dashboard():
     submissions = CodeSubmission.query.filter_by(

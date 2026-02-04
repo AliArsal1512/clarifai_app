@@ -6,6 +6,24 @@ from . import auth_bp # from app/auth/__init__.py
 from ..models import User # from app/models.py
 from .. import db # from app/__init__.py
 
+@auth_bp.route('/check', methods=['GET'])  # This becomes /auth (since blueprint is prefixed with /auth)
+def check_auth():
+    """Check authentication status - called by React on app load"""
+    if current_user.is_authenticated:
+        return jsonify({
+            'authenticated': True,
+            'user': {
+                'id': current_user.id,
+                'username': current_user.username
+                # Add other fields if needed by your React app
+            }
+        })
+    else:
+        return jsonify({
+            'authenticated': False,
+            'user': None
+        })
+
 @auth_bp.route('/login', methods=['POST']) #
 def login(): #
     if current_user.is_authenticated: #

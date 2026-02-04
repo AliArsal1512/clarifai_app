@@ -23,7 +23,7 @@ function App() {
   const checkAuth = async () => {
     try {
       // Check authentication status via API
-      const response = await fetch(`${config.apiBaseUrl}/auth`, {
+      const response = await fetch(`${config.apiBaseUrl}/auth/check`, {
         credentials: 'include',
       });
       if (response.ok) {
