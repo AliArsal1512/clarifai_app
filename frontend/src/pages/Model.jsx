@@ -5,7 +5,7 @@ import ASTVisualization from '../components/ASTVisualization';
 import CFGVisualization from '../components/CFGVisualization';
 import FileSidebar from '../components/FileSidebar';
 import './Model.css';
-import config from './config';
+import config from '../config';
 
 const Model = () => {
   const { theme } = useTheme();

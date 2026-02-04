@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CFGVisualization.css';
-import config from './config';
+import config from '../config';
 
 const CFGVisualization = ({ code, editorRef, theme, isLoading, setIsLoading }) => {
   const [cfgSvg, setCfgSvg] = useState(null);

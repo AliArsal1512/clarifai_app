@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import './Navbar.css';
+import config from '../config';
 
 const Navbar = ({ isAuthenticated, user, onLogout }) => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
 
   const handleLogout = async () => {
     try {
-      await fetch('/auth/logout', {
+      await fetch(`${config.apiBaseUrl}/auth/logout`, {
         method: 'GET',
         credentials: 'include',
       });

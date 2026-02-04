@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import { useTheme } from '../contexts/ThemeContext';
 import './Dashboard.css';
-import config from './config';
+import config from '../config';
 
 const Dashboard = () => {
   const { theme } = useTheme();

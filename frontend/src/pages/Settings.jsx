@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Settings.css';
-import config from './config';
+import config from '../config';
 
 const Settings = () => {
   const [password, setPassword] = useState('');
