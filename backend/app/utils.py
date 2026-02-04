@@ -2,7 +2,7 @@
 import javalang
 import hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from flask import current_app # To access app.hf_pipeline
+from flask import current_app 
 
 def preprocess_code(code: str) -> str:
     # ... (your preprocess_code function)
@@ -564,14 +564,11 @@ def build_ast_json(java_code: str) -> dict:
         hf_client = current_app.hf_client
 
         
-        # Get pipeline reference before processing
-        hf_pipeline = current_app.hf_pipeline
-        
         # Generate comments using batch processing for maximum speed
         class_comments = {}
         method_comments = {}
         
-        if hf_pipeline:
+        if hf_client:
             # Prepare all inputs for batch processing
             all_inputs = []
             input_mapping = []  # Track which input corresponds to which class/method

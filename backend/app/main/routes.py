@@ -108,7 +108,7 @@ def home():
 
                 # Batch processing for faster comment generation
                 # Get pipeline reference before processing
-                hf_pipeline = current_app.hf_pipeline
+                hf_client = current_app.hf_client
                 
                 # Initialize grouped_comments structure
                 for class_name in class_structure.keys():
@@ -118,7 +118,7 @@ def home():
                         grouped_comments[class_name] = {'class_comment': '', 'method_comments': []}
 
                 # Batch process all classes and methods together for maximum speed
-                if hf_pipeline:
+                if hf_client:
                     # Prepare all inputs for batch processing
                     all_inputs = []
                     input_mapping = []  # Track which input corresponds to which class/method
@@ -139,14 +139,25 @@ def home():
                     # Process in batches (model can handle multiple inputs at once)
                     if all_inputs:
                         try:
-                            # Process all inputs in one batch call (much faster than individual calls)
-                            batch_results = hf_pipeline(all_inputs, batch_size=min(8, len(all_inputs)))
+                            # Process all inputs using hf_client
+                            batch_results = []
+                            if hf_client:
+                                for snippet in all_inputs:
+                                    try:
+                                        result = hf_client.predict(
+                                            snippet,
+                                            api_name="/generate_comment"
+                                        )
+                                        batch_results.append(result)  # result is already a string from the API
+                                    except Exception as e:
+                                        print(f"❌ HF API error for snippet: {e}")
+                                        batch_results.append("No comment available")
                             
                             # Map results back to classes/methods
                             for idx, (input_type, class_name, method_name) in enumerate(input_mapping):
                                 if idx < len(batch_results):
                                     result = batch_results[idx]
-                                    comment = clean_comment(result['generated_text'])
+                                    comment = clean_comment(result)  # result is already a string
                                     
                                     if input_type == 'class':
                                         grouped_comments[class_name]['class_comment'] = \
@@ -162,8 +173,16 @@ def home():
                             for class_name, class_code in class_structure.items():
                                 try:
                                     processed_class = preprocess_code(class_code)
-                                    result = hf_pipeline(processed_class)
-                                    comment = clean_comment(result[0]['generated_text'])
+                                    if hf_client:
+                                        try:
+                                            result = hf_client.predict(
+                                                processed_class,
+                                                api_name="/generate_comment"
+                                            )
+                                            comment = clean_comment(result)  # result is a string
+                                        except Exception as e:
+                                            print(f"❌ Error generating comment: {e}")
+                                            comment = "No comment available"
                                     grouped_comments[class_name]['class_comment'] = \
                                         f'<div class="comment-class" id="class_{class_name}">📦 Class: {class_name}\n{comment}</div>'
                                 except Exception as e2:
@@ -173,8 +192,16 @@ def home():
                                 for method in methods:
                                     try:
                                         processed_method = preprocess_code(method['code'])
-                                        result = hf_pipeline(processed_method)
-                                        comment = clean_comment(result[0]['generated_text'])
+                                        if hf_client:
+                                            try:
+                                                result = hf_client.predict(
+                                                    processed_method,
+                                                    api_name="/generate_comment"
+                                                )
+                                                comment = clean_comment(result)  # result is a string
+                                            except Exception as e:
+                                                print(f"❌ Error generating comment: {e}")
+                                                comment = "No comment available"
                                         grouped_comments[class_name]['method_comments'].append(
                                             f'<div class="comment-method" id="method_{class_name}_{method["name"]}">◆ {class_name}.{method["name"]}:\n{comment}</div>'
                                         )
@@ -420,17 +447,19 @@ def process_folder():
                     method_structure = extract_methods(code_content)
                     
                     # Get pipeline reference before threading (to avoid context issues)
-                    hf_pipeline = current_app.hf_pipeline
+                    hf_client = current_app.hf_client
                     
                     # Generate comments using parallel processing (reuse helper functions)
                     def generate_class_comment_folder(class_name, class_code):
                         """Generate comment for a single class (folder processing)"""
                         try:
                             processed_class = preprocess_code(class_code)
-                            if hf_pipeline:
-                                result = hf_pipeline(processed_class)
-                                comment = clean_comment(result[0]['generated_text'])
-                                return class_name, f'<div class="comment-class" id="class_{class_name}">📦 Class: {class_name}\n{comment}</div>'
+                            if hf_client:
+                                result = hf_client.predict(
+                                    processed_class,
+                                    api_name="/generate_comment"
+                                )
+                                comment = clean_comment(result)  # result is a string
                         except Exception as e:
                             print(f"Error generating comment for class {class_name}: {e}")
                             return class_name, None
@@ -440,9 +469,12 @@ def process_folder():
                         """Generate comment for a single method (folder processing)"""
                         try:
                             processed_method = preprocess_code(method['code'])
-                            if hf_pipeline:
-                                result = hf_pipeline(processed_method)
-                                comment = clean_comment(result[0]['generated_text'])
+                            if hf_client:
+                                result = hf_client.predict(
+                                    processed_method,
+                                    api_name="/generate_comment"
+                                )
+                                comment = clean_comment(result)  # result is a string
                                 return (class_name, method['name']), f'<div class="comment-method" id="method_{class_name}_{method["name"]}">◆ {class_name}.{method["name"]}:\n{comment}</div>'
                         except Exception as e:
                             print(f"Error generating comment for method {class_name}.{method['name']}: {e}")
@@ -459,7 +491,7 @@ def process_folder():
 
                     # Process classes and methods in parallel
                     max_workers = min(8, len(class_structure) + sum(len(methods) for methods in method_structure.values()))
-                    if max_workers > 0 and hf_pipeline:
+                    if max_workers > 0 and hf_client:
                         with ThreadPoolExecutor(max_workers=max_workers) as executor:
                             # Submit all class comment generation tasks
                             class_futures = {
