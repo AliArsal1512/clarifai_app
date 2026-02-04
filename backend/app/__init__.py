@@ -1,6 +1,7 @@
 # app/__init__.py
+from gradio_client import Client
 import os
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, app, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
@@ -87,29 +88,11 @@ def create_app(config_class=Config):
     
     # Initialize ML Pipeline (keep as is)
     try:
-        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline as hf_pipeline
-        import torch
-
-        MODEL_ID = "aliarsal1512/clarifai_java_code_commenter"
-        DEVICE = -1
-
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-        model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_ID)
-
-        app.hf_pipeline = hf_pipeline(
-            "text2text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            device=DEVICE,
-            max_length=64,
-            num_beams=1,
-            do_sample=False
-        )
-
-        print("✅ Hugging Face pipeline initialized")
-
+        # Connect to your Hugging Face Space
+        app.hf_client = Client("aliarsal1512/java_comment_generator")
+        print("✅ Hugging Face client initialized")
     except Exception as e:
-        print("❌ Model initialization error:", e)
-        app.hf_pipeline = None
+        print("❌ HF Client init failed:", e)
+        app.hf_client = None
     
     return app

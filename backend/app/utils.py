@@ -560,6 +560,9 @@ def build_ast_json(java_code: str) -> dict:
         # Extract classes and methods first to generate comments
         class_structure = extract_classes(java_code)
         method_structure = extract_methods(java_code)
+
+        hf_client = current_app.hf_client
+
         
         # Get pipeline reference before processing
         hf_pipeline = current_app.hf_pipeline
@@ -592,13 +595,25 @@ def build_ast_json(java_code: str) -> dict:
             if all_inputs:
                 try:
                     # Process all inputs in one batch call (much faster than individual calls)
-                    batch_results = hf_pipeline(all_inputs, batch_size=min(8, len(all_inputs)))
+                    batch_results = []
+                    if hf_client:
+                        for snippet in all_inputs:
+                            try:
+                                result = hf_client.predict(
+                                    snippet,
+                                    api_name="/generate_comment"
+                                )
+                                batch_results.append(clean_comment(result))
+                            except Exception as e:
+                                print(f"❌ HF API error for snippet: {e}")
+                                batch_results.append("No comment available")
+
                     
                     # Map results back to classes/methods
                     for idx, (input_type, class_name, method_name) in enumerate(input_mapping):
                         if idx < len(batch_results):
                             result = batch_results[idx]
-                            comment = clean_comment(result['generated_text'])
+                            comment = clean_comment(result)  # result is already a string
                             
                             if input_type == 'class':
                                 class_comments[class_name] = comment
@@ -611,8 +626,16 @@ def build_ast_json(java_code: str) -> dict:
                         if isinstance(class_code, str):
                             try:
                                 processed_class = preprocess_code(class_code)
-                                result = hf_pipeline(processed_class)
-                                comment = clean_comment(result[0]['generated_text'])
+                                if hf_client:
+                                    try:
+                                        result = hf_client.predict(
+                                            processed_class,  # positional argument
+                                            api_name="/generate_comment"       # first function in your HF Space
+                                        )
+                                        comment = clean_comment(result)  # result is a string
+                                    except Exception as e:
+                                        print(f"❌ Error generating comment: {e}")
+                                        comment = "No comment available"
                                 class_comments[class_name] = comment
                             except Exception as e2:
                                 print(f"Error generating AST comment for class {class_name}: {e2}")
@@ -622,8 +645,16 @@ def build_ast_json(java_code: str) -> dict:
                             for method in methods:
                                 try:
                                     processed_method = preprocess_code(method['code'])
-                                    result = hf_pipeline(processed_method)
-                                    comment = clean_comment(result[0]['generated_text'])
+                                    if hf_client:
+                                        try:
+                                            result = hf_client.predict(
+                                                processed_method,  # positional argument
+                                                api_name="/generate_comment"       # first function in your HF Space
+                                            )
+                                            comment = clean_comment(result)  # result is a string
+                                        except Exception as e:
+                                            print(f"❌ Error generating comment: {e}")
+                                            comment = "No comment available"
                                     method_comments[(class_name, method['name'])] = comment
                                 except Exception as e2:
                                     print(f"Error generating AST comment for method {class_name}.{method['name']}: {e2}")
