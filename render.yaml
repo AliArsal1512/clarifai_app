@@ -1,20 +1,11 @@
 services:
-  # Backend Service (Python Flask)
+  # Backend Service (Docker - with Graphviz)
   - type: web
     name: clarifai-backend
-    env: python
-    buildCommand: |
-      echo "Building Python backend..."
-      apt-get update
-      apt-get install -y graphviz
-      cd backend
-      pip install -r requirements.txt
-    startCommand: |
-      cd backend
-      gunicorn wsgi:app
+    dockerfilePath: ./backend/Dockerfile  # ← ADD THIS
+    dockerContext: ./backend              # ← ADD THIS
+    # REMOVE: env, buildCommand, startCommand (Docker handles these)
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.13
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
@@ -23,29 +14,26 @@ services:
         fromDatabase:
           name: clarifai-db
           property: connectionString
-      # CORS: Allow frontend to access backend
       - key: CORS_ORIGINS
-        value: "https://clarifai-frontend.onrender.com"  # Update after frontend deploys
+        value: "https://clarifai-frontend.onrender.com,http://localhost:3000"
     healthCheckPath: /api/health
 
-  # Frontend Service (React)
+  # Frontend Service (unchanged)
   - type: web
     name: clarifai-frontend
     env: static
     buildCommand: |
-      echo "Building React frontend..."
       cd frontend
       npm install
       npm run build
     staticPublishPath: frontend/dist
-    # Enable SPA routing
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: "https://clarifai-backend.onrender.com"  # Your backend URL
+        value: "https://clarifai-backend.onrender.com"
 
 databases:
   - name: clarifai-db
