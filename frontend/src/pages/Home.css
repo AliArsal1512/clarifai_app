@@ -180,7 +180,7 @@
   padding-bottom: 4rem;
   min-height: 100vh;
   background: linear-gradient(180deg, rgba(248,249,255,0.9) 0%, rgba(255,255,255,0.95) 60%),
-              url('/static/images/body-bg2.jpg');
+              url('/images/body-bg2.jpg');
   background-size: cover;
   background-position: center;
 }
