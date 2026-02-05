@@ -1,7 +1,7 @@
 .login-page,
 .signup-page {
   min-height: 100vh;
-  background: url('/src/pages/static/images/body-bg9.png');
+  background: url('/images/body-bg9.png');
   background-size: cover;
   background-position: center;
   color: var(--text-primary);
