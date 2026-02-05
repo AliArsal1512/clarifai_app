@@ -48,15 +48,6 @@ def create_app(config_class=Config):
     def load_user(user_id):
         return User.query.get(int(user_id))
     
-    # Add API route for checking authentication
-    @app.route('/api/check-auth')
-    def check_auth():
-        if current_user.is_authenticated:
-            return jsonify({
-                'authenticated': True,
-                'user': {'username': current_user.username, 'id': current_user.id}
-            })
-        return jsonify({'authenticated': False, 'user': None})
     
     # Health check for Render
     @app.route('/api/health')
