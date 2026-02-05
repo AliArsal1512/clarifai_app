@@ -37,17 +37,32 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
           ClarifAI
         </Link>
         
-        {/* Combined theme toggle + hamburger container for mobile */}
-        <div className="mobile-toggle-container d-lg-none">
-          <button className="theme-toggle theme-toggle-mobile" onClick={toggleTheme}>
+        {/* Mobile theme toggle placed right before hamburger */}
+        <div className="d-flex align-items-center">
+          <button 
+            className="theme-toggle me-1 d-lg-none" 
+            onClick={toggleTheme}
+            style={{
+              marginRight: '0',
+              borderRadius: '10px 0 0 10px',
+              borderRight: 'none',
+              boxShadow: 'inset -1px 0 0 rgba(255, 255, 255, 0.05)'
+            }}
+          >
             <span className="theme-toggle-icon">{theme === 'light' ? '🌙' : '☀️'}</span>
           </button>
+          
           <button
-            className="navbar-toggler"
+            className="navbar-toggler d-lg-none"
             type="button"
             onClick={handleNavToggle}
             aria-expanded={!isNavCollapsed}
             aria-label="Toggle navigation"
+            style={{
+              marginLeft: '0',
+              borderRadius: '0 10px 10px 0',
+              borderLeft: 'none'
+            }}
           >
             <span className="navbar-toggler-icon"></span>
           </button>
