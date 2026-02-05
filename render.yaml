@@ -5,6 +5,8 @@ services:
     env: python
     buildCommand: |
       echo "Building Python backend..."
+      apt-get update
+      apt-get install -y graphviz
       cd backend
       pip install -r requirements.txt
     startCommand: |
