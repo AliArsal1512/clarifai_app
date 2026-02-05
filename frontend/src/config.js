@@ -1,6 +1,6 @@
 // src/config.js
 const config = {
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000' || 'https://clarifai-app.onrender.com'
 };
 
 export default config;
