@@ -15,26 +15,26 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    // Check if user is authenticated on mount
-    checkAuth();
-  }, []);
+  // useEffect(() => {
+  //   // Check if user is authenticated on mount
+  //   checkAuth();
+  // }, []);
 
-  const checkAuth = async () => {
-    try {
-      // Check authentication status via API
-      const response = await fetch(`${config.apiBaseUrl}/auth/check`, {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthenticated(data.authenticated);
-        setUser(data.user);
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-    }
-  };
+  // const checkAuth = async () => {
+  //   try {
+  //     // Check authentication status via API
+  //     const response = await fetch(`${config.apiBaseUrl}/auth/check`, {
+  //       credentials: 'include',
+  //     });
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setIsAuthenticated(data.authenticated);
+  //       setUser(data.user);
+  //     }
+  //   } catch (error) {
+  //     console.error('Auth check failed:', error);
+  //   }
+  // };
 
   return (
     <ThemeProvider>
