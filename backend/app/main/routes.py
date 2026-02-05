@@ -297,8 +297,10 @@ def home():
 # Use /api/dashboard for API data
 
 @main_bp.route('/dashboard')
-@login_required
 def api_dashboard():
+    if not current_user.is_authenticated:
+        return jsonify({'error': 'Authentication required'}), 401
+    
     submissions = CodeSubmission.query.filter_by(
         user_id=current_user.id,
         is_success=True
