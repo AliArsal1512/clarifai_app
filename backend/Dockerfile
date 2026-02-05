@@ -20,4 +20,4 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
 # Start command
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:10000", "--workers", "4"]
+CMD ["gunicorn", "wsgi:app", "--bind", "0.0.0.0:10000", "--workers", "4"]
