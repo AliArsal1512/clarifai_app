@@ -24,7 +24,7 @@ def login(): #
     password = request.form.get('password') #
     user = User.query.filter_by(username=username).first() #
     if user and user.check_password(password): #
-        login_user(user) #
+        login_user(user, remember=True) #
         return jsonify({'success': True, 'redirect': '/dashboard'})
     # Return JSON error for React
     return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
