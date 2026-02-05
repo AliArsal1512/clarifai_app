@@ -37,22 +37,21 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
           ClarifAI
         </Link>
         
-        {/* Theme toggle for mobile - positioned before hamburger */}
-        <div className="d-lg-none theme-toggle-mobile">
-          <button className="theme-toggle" onClick={toggleTheme}>
+        {/* Combined theme toggle + hamburger container for mobile */}
+        <div className="mobile-toggle-container d-lg-none">
+          <button className="theme-toggle theme-toggle-mobile" onClick={toggleTheme}>
             <span className="theme-toggle-icon">{theme === 'light' ? '🌙' : '☀️'}</span>
           </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={handleNavToggle}
+            aria-expanded={!isNavCollapsed}
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
         </div>
-        
-        <button
-          className="navbar-toggler"
-          type="button"
-          onClick={handleNavToggle}
-          aria-expanded={!isNavCollapsed}
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         
         <div className={`collapse navbar-collapse ${!isNavCollapsed ? 'show' : ''}`} id="navbarNav">
           <ul className="navbar-nav ms-auto">
