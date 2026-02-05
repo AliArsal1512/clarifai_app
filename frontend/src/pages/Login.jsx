@@ -14,13 +14,17 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append('username', username);
       formData.append('password', password);
 
       const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
         method: 'POST',
         credentials: 'include',
+        headers: {
+          // Add Content-Type header
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         body: formData,
       });
 
