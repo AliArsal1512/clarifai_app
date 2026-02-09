@@ -238,18 +238,34 @@
 /* Mobile navbar collapse/expand animation */
 .navbar-collapse {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 500px;
-  overflow: hidden;
 }
 
-.navbar-collapse:not(.show) {
-  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  max-height: 0;
+/* Desktop: Always show navbar */
+@media (min-width: 992px) {
+  .navbar-collapse {
+    display: flex !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
 }
 
-.navbar-collapse.show {
-  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  max-height: 500px;
+/* Mobile: Apply animations */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    max-height: 500px;
+    overflow: hidden;
+  }
+
+  .navbar-collapse:not(.show) {
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    max-height: 0;
+  }
+
+  .navbar-collapse.show {
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    max-height: 500px;
+  }
 }
 
 @keyframes slideDown {
