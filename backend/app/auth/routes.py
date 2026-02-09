@@ -62,20 +62,27 @@ def logout():
 
     response = jsonify({'success': True})
 
+    # Get the current configuration for cookies
+    is_secure = current_app.config.get('SESSION_COOKIE_SECURE', False)
+    cookie_domain = current_app.config.get('SESSION_COOKIE_DOMAIN')
+    cookie_samesite = current_app.config.get('SESSION_COOKIE_SAMESITE', 'Lax')
+    
+    # Delete remember_token cookie with matching attributes
     response.delete_cookie(
         'remember_token',
         path='/',
-        domain='.onrender.com',
-        secure=True,
-        samesite='None'
+        domain=cookie_domain if is_secure else None,
+        secure=is_secure,
+        samesite=cookie_samesite
     )
 
+    # Delete session cookie with matching attributes
     response.delete_cookie(
         'session',
         path='/',
-        domain='.onrender.com',
-        secure=True,
-        samesite='None'
+        domain=cookie_domain if is_secure else None,
+        secure=is_secure,
+        samesite=cookie_samesite
     )
 
     return response
