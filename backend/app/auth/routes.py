@@ -63,13 +63,7 @@ def logout():
     # Create response
     response = jsonify({'success': True, 'redirect': '/'})
     
-    # Clear the session cookie
-    response.set_cookie('session', '', expires=0, max_age=0)
-    
-    # IMPORTANT: Also clear the remember token cookie
-    response.set_cookie('remember_token', '', expires=0, max_age=0)
-    
-    # Clear any other potential Flask-Login cookies
-    response.delete_cookie('session')
+    response.delete_cookie("remember_token")
+    response.delete_cookie("session")
     
     return response
