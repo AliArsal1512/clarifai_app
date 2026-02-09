@@ -58,41 +58,55 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch(`${config.apiBaseUrl}/auth/logout`, {
+        // Call backend logout
+        await fetch(`${config.apiBaseUrl}/auth/logout`, {
         method: 'GET',
         credentials: 'include',
-      });
+        });
+        
+        // Clear ALL cookies (optional aggressive approach)
+        document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        
+        // Clear local storage if you're using it
+        localStorage.clear();
+        sessionStorage.clear();
+        
     } catch (error) {
-      console.error('Logout failed:', error);
+        console.error('Logout failed:', error);
     } finally {
-      setUser(null);
+        // Always clear the user state
+        setUser(null);
     }
-  };
+    };
 
   const signup = async (userData) => {
-  try {
-    const formData = new FormData();
-    Object.keys(userData).forEach(key => {
-      formData.append(key, userData[key]);
-    });
+    try {
+        const formData = new FormData();
+        Object.keys(userData).forEach(key => {
+        formData.append(key, userData[key]);
+        });
 
-    const response = await fetch(`${config.apiBaseUrl}/auth/signup`, {
-      method: 'POST',
-      credentials: 'include',
-      body: formData,
-    });
+        const response = await fetch(`${config.apiBaseUrl}/auth/signup`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+        });
 
-    const data = await response.json();
-    
-    if (response.ok && data.success) {
-      return { success: true, data };
-    } else {
-      return { success: false, error: data.error || 'Registration failed' };
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+        return { success: true, data };
+        } else {
+        return { success: false, error: data.error || 'Registration failed' };
+        }
+    } catch (error) {
+        return { success: false, error: 'Network error' };
     }
-  } catch (error) {
-    return { success: false, error: 'Network error' };
-  }
-};
+    };
 
   const value = {
     user,
