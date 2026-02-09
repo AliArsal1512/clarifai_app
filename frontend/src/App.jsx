@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Model from './pages/Model';
@@ -8,61 +9,51 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Settings from './pages/Settings';
+import PrivateRoute from './components/PrivateRoute';
+import LoadingSpinner from './components/LoadingSpinner';
 import './App.css';
-import config from './config';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const { loading } = useAuth();
 
-  useEffect(() => {
-    // Check if user is authenticated on mount
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      // Check authentication status via API
-      const response = await fetch(`${config.apiBaseUrl}/auth/check`, {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthenticated(data.authenticated);
-        setUser(data.user);
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-    }
-  };
+  // Show loading spinner while checking auth
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <ThemeProvider>
       <Router>
         <div className="app">
-          <Navbar isAuthenticated={isAuthenticated} user={user} onLogout={() => setIsAuthenticated(false)} />
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route 
               path="/model" 
-              element={isAuthenticated ? <Model /> : <Navigate to="/auth/login" />} 
+              element={
+                <PrivateRoute>
+                  <Model />
+                </PrivateRoute>
+              } 
             />
             <Route 
               path="/dashboard" 
-              element={isAuthenticated ? <Dashboard /> : <Navigate to="/auth/login" />} 
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              } 
             />
             <Route 
               path="/settings" 
-              element={isAuthenticated ? <Settings /> : <Navigate to="/auth/login" />} 
+              element={
+                <PrivateRoute>
+                  <Settings />
+                </PrivateRoute>
+              } 
             />
-            <Route 
-              path="/auth/login" 
-              element={<Login onLogin={() => { setIsAuthenticated(true); checkAuth(); }} />} 
-            />
-            <Route 
-              path="/auth/signup" 
-              element={<Signup onSignup={() => { setIsAuthenticated(true); checkAuth(); }} />} 
-            />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
           </Routes>
         </div>
       </Router>
@@ -71,4 +62,3 @@ function App() {
 }
 
 export default App;
-

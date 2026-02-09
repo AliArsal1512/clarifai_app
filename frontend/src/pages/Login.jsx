@@ -1,39 +1,25 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Auth.css';
-import config from '../config';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      const formData = new FormData();
-      formData.append('username', username);
-      formData.append('password', password);
-
-      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      });
-
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
-        onLogin();
-        navigate(data.redirect || '/dashboard');
-      } else {
-        setError(data.error || 'Invalid username or password');
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+    const result = await login(username, password);
+    
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setError(result.error || 'Invalid username or password');
     }
   };
 
@@ -80,4 +66,3 @@ const Login = ({ onLogin }) => {
 };
 
 export default Login;
-

@@ -1,41 +1,33 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Auth.css';
-import config from '../config';
 
-const Signup = ({ onSignup }) => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      const formData = new FormData();
-      formData.append('username', username.trim());
-      formData.append('email', email.trim());
-      formData.append('password', password);
-
-      const response = await fetch(`${config.apiBaseUrl}/auth/signup`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      });
-
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
-        onSignup();
-        navigate(data.redirect || '/dashboard');
-      } else {
-        setError(data.error || 'Registration failed. Please try again.');
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+    const result = await signup({ 
+      username: username.trim(), 
+      email: email.trim(), 
+      password 
+    });
+    
+    if (result.success) {
+      // Signup successful, redirect to login
+      navigate('/auth/login');
+      // Show success message if you want
+      // alert('Signup successful! Please login.');
+    } else {
+      setError(result.error || 'Registration failed. Please try again.');
     }
   };
 
@@ -93,4 +85,3 @@ const Signup = ({ onSignup }) => {
 };
 
 export default Signup;
-

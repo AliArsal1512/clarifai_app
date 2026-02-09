@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
-import config from '../config';
 
-const Navbar = ({ isAuthenticated, user, onLogout }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
   const handleNavToggle = () => {
@@ -14,16 +15,8 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
   };
 
   const handleLogout = async () => {
-    try {
-      await fetch(`${config.apiBaseUrl}/auth/logout`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-      onLogout();
-      navigate('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    await logout();
+    navigate('/');
   };
 
   const closeNavbar = () => {
@@ -91,6 +84,11 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
                   <Link className="nav-link" to="/settings" onClick={closeNavbar}>
                     Settings
                   </Link>
+                </li>
+                <li className="nav-item">
+                  <span className="nav-link text-muted">
+                    Welcome, {user?.username || 'User'}
+                  </span>
                 </li>
                 <li className="nav-item">
                   <button className="nav-link btn btn-link" onClick={() => {
