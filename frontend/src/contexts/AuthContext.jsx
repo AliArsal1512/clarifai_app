@@ -71,14 +71,18 @@ export const AuthProvider = ({ children }) => {
             throw new Error('Logout failed');
         }
 
-        // Clear frontend state IMMEDIATELY
+        // Clear frontend state
         setUser(null);
         
     } catch (error) {
         console.error('Logout failed:', error);
         setUser(null);
     } finally {
-        // Always clear storage and redirect, regardless of response
+        // Explicitly remove remember_token cookie from frontend
+        document.cookie = 'remember_token=; max-age=0; path=/';
+        document.cookie = 'session=; max-age=0; path=/';
+        
+        // Clear storage
         localStorage.clear();
         sessionStorage.clear();
         

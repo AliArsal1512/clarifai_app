@@ -66,32 +66,29 @@ def logout():
     
     response = jsonify({'success': True})
 
-    # Get the current configuration for cookies
+    # Get the configuration to match how cookies were created
     is_secure = current_app.config.get('SESSION_COOKIE_SECURE', False)
-    cookie_domain = current_app.config.get('SESSION_COOKIE_DOMAIN')
     cookie_samesite = current_app.config.get('SESSION_COOKIE_SAMESITE', 'Lax')
     
-    # Delete remember_token cookie - use max_age=0 for better compatibility
+    # Delete cookies by setting them to empty with max_age=0
+    # Must match the SECURE and SAMESITE attributes from config
     response.set_cookie(
         'remember_token',
         value='',
         max_age=0,
         expires=0,
         path='/',
-        domain=cookie_domain if is_secure else None,
         secure=is_secure,
         httponly=True,
         samesite=cookie_samesite
     )
 
-    # Delete session cookie - use max_age=0 for better compatibility
     response.set_cookie(
         'session',
         value='',
         max_age=0,
         expires=0,
         path='/',
-        domain=cookie_domain if is_secure else None,
         secure=is_secure,
         httponly=True,
         samesite=cookie_samesite
