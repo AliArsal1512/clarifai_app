@@ -1,5 +1,5 @@
 # app/auth/routes.py
-from flask import redirect, url_for, request, jsonify, current_app
+from flask import redirect, url_for, request, jsonify, current_app, session
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from . import auth_bp # from app/auth/__init__.py
@@ -58,8 +58,12 @@ def signup(): #
 
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
+    # First, log out the user (clears Flask-Login session data)
     logout_user()
-
+    
+    # Clear the entire Flask session
+    session.clear()
+    
     response = jsonify({'success': True})
 
     # Get the current configuration for cookies
@@ -67,21 +71,29 @@ def logout():
     cookie_domain = current_app.config.get('SESSION_COOKIE_DOMAIN')
     cookie_samesite = current_app.config.get('SESSION_COOKIE_SAMESITE', 'Lax')
     
-    # Delete remember_token cookie with matching attributes
-    response.delete_cookie(
+    # Delete remember_token cookie - use max_age=0 for better compatibility
+    response.set_cookie(
         'remember_token',
+        value='',
+        max_age=0,
+        expires=0,
         path='/',
         domain=cookie_domain if is_secure else None,
         secure=is_secure,
+        httponly=True,
         samesite=cookie_samesite
     )
 
-    # Delete session cookie with matching attributes
-    response.delete_cookie(
+    # Delete session cookie - use max_age=0 for better compatibility
+    response.set_cookie(
         'session',
+        value='',
+        max_age=0,
+        expires=0,
         path='/',
         domain=cookie_domain if is_secure else None,
         secure=is_secure,
+        httponly=True,
         samesite=cookie_samesite
     )
 

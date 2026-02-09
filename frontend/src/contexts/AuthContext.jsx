@@ -67,30 +67,25 @@ export const AuthProvider = ({ children }) => {
             },
         });
 
-        if (response.ok) {
-            // Clear frontend state IMMEDIATELY
-            setUser(null);
-            
-            // Clear ALL cookies on frontend as well (extra safety)
-            document.cookie.split(";").forEach((c) => {
-                document.cookie = c
-                    .replace(/^ +/, "")
-                    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-            });
-            
-            // Clear storage
-            localStorage.clear();
-            sessionStorage.clear();
+        if (!response.ok) {
+            throw new Error('Logout failed');
         }
-        
-        // Force a page reload to clear any React state
-        window.location.href = '/';
+
+        // Clear frontend state IMMEDIATELY
+        setUser(null);
         
     } catch (error) {
         console.error('Logout failed:', error);
-        // Still clear everything even if API fails
         setUser(null);
-        window.location.href = '/';
+    } finally {
+        // Always clear storage and redirect, regardless of response
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Give a small delay for cookie headers to be processed
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 100);
     }
   };
 
