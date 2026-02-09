@@ -86,11 +86,6 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <span className="nav-link text-muted">
-                    Welcome, {user?.username || 'User'}
-                  </span>
-                </li>
-                <li className="nav-item">
                   <button className="nav-link btn btn-link" onClick={() => {
                     handleLogout();
                     closeNavbar();
