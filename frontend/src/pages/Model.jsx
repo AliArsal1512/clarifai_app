@@ -398,9 +398,9 @@ const Model = () => {
         />
 
         <section className="model-section-content">
-          <form onSubmit={handleSubmit} className="code-form">
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-2">
+          <form onSubmit={handleSubmit} className="code-form editor-form">
+            <div className="editor-header mb-3">
+              <div className="d-flex justify-content-between align-items-center">
                 <label className="form-label">Java Code Input</label>
                 <div className="d-flex gap-2">
                   <input
@@ -463,9 +463,12 @@ const Model = () => {
                   </button>
                 </div>
               </div>
-              <div id="editorContainer" style={{ height: 'calc(100vh - 120px)', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
+            </div>
+
+            <div className="editor-container-wrapper">
+              <div id="editorContainer" style={{ border: '1px solid var(--border-color)', borderRadius: '12px', height: '100%' }}>
                 <Editor
-                  height="calc(100vh - 120px)"
+                  height="100%"
                   defaultLanguage="java"
                   value={code}
                   theme={theme === 'dark' ? 'vs-dark' : 'vs'}
@@ -483,7 +486,8 @@ const Model = () => {
                 />
               </div>
             </div>
-            <div className="d-flex justify-content-center">
+
+            <div className="editor-footer">
               <button type="submit" className="btn btn-primary clarifai-btn">
                 Submit Code
               </button>
