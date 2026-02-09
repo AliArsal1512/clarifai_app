@@ -54,14 +54,14 @@
 .editor-container-wrapper {
   flex: 1;
   min-height: 0;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .editor-footer {
   flex-shrink: 0;
   display: flex;
   justify-content: center;
-  padding-top: 10px;
+  padding-top: 6px;
   padding-bottom: 0px;
   border-top: 1px solid var(--border-color);
 }
@@ -69,14 +69,14 @@
 /* Responsive editor footer */
 @media (max-width: 768px) {
   .editor-footer {
-    padding-top: 6px;
+    padding-top: 4px;
     padding-bottom: 0px;
   }
 }
 
 @media (max-width: 576px) {
   .editor-footer {
-    padding-top: 4px;
+    padding-top: 3px;
     padding-bottom: 0px;
   }
 }
@@ -116,7 +116,7 @@
 
 .code-form label {
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -125,14 +125,14 @@
 @media (max-width: 768px) {
   .code-form label {
     font-size: 1.25rem;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 }
 
 @media (max-width: 576px) {
   .code-form label {
     font-size: 1.1rem;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
 }
 
