@@ -27,7 +27,7 @@ const Login = () => {
     <div className="login-page">
       <div className="log-sign-card card">
         <div className="card-body p-4">
-          <p>Authentication will not work if the backend is not awake on Render.
+          <p className="text-muted">Authentication will not work if the backend is not awake on Render.
             <br />For waking up the backend please visit 
               <a href="https://clarifai-app.onrender.com/" target="_blank" rel="noopener noreferrer"> https://clarifai-app.onrender.com/</a>
           </p>
