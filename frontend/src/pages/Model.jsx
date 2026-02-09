@@ -23,8 +23,24 @@ const Model = () => {
   const [pendingCode, setPendingCode] = useState('');
   const [relationships, setRelationships] = useState({ association: [], aggregation: [], composition: [] });
   const [selectedRelationshipType, setSelectedRelationshipType] = useState(null);
+  const [showUploadDropdown, setShowUploadDropdown] = useState(false);
   const editorRef = useRef(null);
   const folderUploadRef = useRef(null);
+  const uploadDropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (uploadDropdownRef.current && !uploadDropdownRef.current.contains(event.target)) {
+        setShowUploadDropdown(false);
+      }
+    };
+
+    if (showUploadDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showUploadDropdown]);
 
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
@@ -404,12 +420,39 @@ const Model = () => {
                     className="d-none"
                     onChange={handleFolderUpload}
                   />
-                  <label htmlFor="fileUpload" className="btn btn-sm clarifai-btn" style={{ margin: 0, marginBottom: '10px', fontSize: '0.9rem', padding: '6px 12px' }}>
-                    📁 Upload Java File
-                  </label>
-                  <label htmlFor="folderUpload" className="btn btn-sm clarifai-btn" style={{ margin: 0, marginBottom: '10px', fontSize: '0.9rem', padding: '6px 12px' }}>
-                    📂 Upload Folder
-                  </label>
+                  
+                  {/* Desktop: Show all buttons */}
+                  <div className="upload-buttons-desktop d-none d-lg-flex gap-2">
+                    <label htmlFor="fileUpload" className="btn btn-sm clarifai-btn" style={{ margin: 0, marginBottom: '10px', fontSize: '0.9rem', padding: '6px 12px' }}>
+                      📁 Upload Java File
+                    </label>
+                    <label htmlFor="folderUpload" className="btn btn-sm clarifai-btn" style={{ margin: 0, marginBottom: '10px', fontSize: '0.9rem', padding: '6px 12px' }}>
+                      📂 Upload Folder
+                    </label>
+                  </div>
+
+                  {/* Mobile: Show dropdown */}
+                  <div className="upload-buttons-mobile d-lg-none position-relative" ref={uploadDropdownRef}>
+                    <button
+                      type="button"
+                      className="btn btn-sm clarifai-btn"
+                      style={{ margin: 0, marginBottom: '10px', fontSize: '0.9rem', padding: '6px 12px' }}
+                      onClick={() => setShowUploadDropdown(!showUploadDropdown)}
+                    >
+                      📤 Upload
+                    </button>
+                    {showUploadDropdown && (
+                      <div className="upload-dropdown">
+                        <label htmlFor="fileUpload" className="dropdown-item" onClick={() => setShowUploadDropdown(false)}>
+                          📁 Upload File
+                        </label>
+                        <label htmlFor="folderUpload" className="dropdown-item" onClick={() => setShowUploadDropdown(false)}>
+                          📂 Upload Folder
+                        </label>
+                      </div>
+                    )}
+                  </div>
+
                   <button
                     type="button"
                     className="btn btn-sm clarifai-btn"
