@@ -17,7 +17,7 @@
 
 .code-form {
   background-color: var(--bg-tertiary);
-  padding: 20px;
+  padding: 12px;
   color: var(--text-primary);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -36,55 +36,55 @@
 
 .editor-header {
   flex-shrink: 0;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 
 @media (max-width: 768px) {
   .editor-header {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 }
 
 @media (max-width: 576px) {
   .editor-header {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 }
 
 .editor-container-wrapper {
   flex: 1;
   min-height: 0;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 
 .editor-footer {
   flex-shrink: 0;
   display: flex;
   justify-content: center;
-  padding-top: 15px;
-  padding-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 0px;
   border-top: 1px solid var(--border-color);
 }
 
 /* Responsive editor footer */
 @media (max-width: 768px) {
   .editor-footer {
-    padding-top: 10px;
-    padding-bottom: 3px;
+    padding-top: 6px;
+    padding-bottom: 0px;
   }
 }
 
 @media (max-width: 576px) {
   .editor-footer {
-    padding-top: 8px;
-    padding-bottom: 2px;
+    padding-top: 4px;
+    padding-bottom: 0px;
   }
 }
 
 /* Responsive padding for code form */
 @media (max-width: 768px) {
   .code-form {
-    padding: 15px;
+    padding: 10px;
     margin-top: 8px;
   }
 
@@ -95,7 +95,7 @@
 
 @media (max-width: 576px) {
   .code-form {
-    padding: 10px;
+    padding: 6px;
     margin-top: 6px;
   }
 
@@ -116,7 +116,7 @@
 
 .code-form label {
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -125,14 +125,14 @@
 @media (max-width: 768px) {
   .code-form label {
     font-size: 1.25rem;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 }
 
 @media (max-width: 576px) {
   .code-form label {
     font-size: 1.1rem;
-    margin-bottom: 6px;
+    margin-bottom: 3px;
   }
 }
 
