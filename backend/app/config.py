@@ -21,18 +21,26 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     
     # Security settings
-    SESSION_COOKIE_SECURE = os.environ.get('FLASK_ENV') == 'production'
-    REMEMBER_COOKIE_SECURE = os.environ.get('FLASK_ENV') == 'production'
+    FLASK_ENV = os.environ.get('FLASK_ENV', 'development')
+    IS_PRODUCTION = FLASK_ENV == 'production'
+    
+    SESSION_COOKIE_SECURE = IS_PRODUCTION  # True in production, False in development
+    REMEMBER_COOKIE_SECURE = IS_PRODUCTION
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_HTTPONLY = True
 
-    # CRITICAL ADDITIONS for cross-origin (Vercel ↔ Render):
-    SESSION_COOKIE_SAMESITE = 'None'  # Allows cross-origin cookies
-    REMEMBER_COOKIE_SAMESITE = 'None'  # Allows cross-origin cookies
-
-    # Optional but helpful:
-    SESSION_COOKIE_DOMAIN = '.onrender.com'  # Allows subdomains
-    SESSION_COOKIE_PATH = '/'  # Cookie available on all paths
+    # IMPORTANT FIX: Remove or comment out SESSION_COOKIE_DOMAIN
+    # SESSION_COOKIE_DOMAIN = '.onrender.com'  # REMOVE THIS LINE
+    
+    # For SameSite cookies in cross-origin scenarios
+    if IS_PRODUCTION:
+        SESSION_COOKIE_SAMESITE = 'None'  # Required for cross-origin in production
+        REMEMBER_COOKIE_SAMESITE = 'None'
+    else:
+        SESSION_COOKIE_SAMESITE = 'Lax'  # Safer for development
+        REMEMBER_COOKIE_SAMESITE = 'Lax'
+    
+    SESSION_COOKIE_PATH = '/'
     
     # CORS settings
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000').split(',')

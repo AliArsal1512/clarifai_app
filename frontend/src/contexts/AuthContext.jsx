@@ -58,28 +58,37 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-        // Call backend logout
+        // Call backend logout with POST method
         await fetch(`${config.apiBaseUrl}/auth/logout`, {
-        method: 'GET',
+        method: 'POST',  // Changed from GET to POST
         credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         });
         
-        // Clear ALL cookies (optional aggressive approach)
+        // Clear frontend state IMMEDIATELY
+        setUser(null);
+        
+        // Clear ALL cookies on frontend as well (extra safety)
         document.cookie.split(";").forEach((c) => {
         document.cookie = c
             .replace(/^ +/, "")
             .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
         
-        // Clear local storage if you're using it
+        // Clear storage
         localStorage.clear();
         sessionStorage.clear();
         
+        // Force a page reload to clear any React state
+        window.location.href = '/';
+        
     } catch (error) {
         console.error('Logout failed:', error);
-    } finally {
-        // Always clear the user state
+        // Still clear everything even if API fails
         setUser(null);
+        window.location.href = '/';
     }
     };
 

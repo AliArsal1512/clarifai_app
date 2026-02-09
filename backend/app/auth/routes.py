@@ -57,6 +57,19 @@ def signup(): #
         return jsonify({'success': False, 'error': 'An error occurred. Please try again.'}), 500
 
 @auth_bp.route('/logout') #
-def logout(): #
-    logout_user() #
-    return jsonify({'success': True, 'redirect': '/'})
+def logout():
+    logout_user()  # This clears the session
+    
+    # Create response
+    response = jsonify({'success': True, 'redirect': '/'})
+    
+    # Clear the session cookie
+    response.set_cookie('session', '', expires=0, max_age=0)
+    
+    # IMPORTANT: Also clear the remember token cookie
+    response.set_cookie('remember_token', '', expires=0, max_age=0)
+    
+    # Clear any other potential Flask-Login cookies
+    response.delete_cookie('session')
+    
+    return response
