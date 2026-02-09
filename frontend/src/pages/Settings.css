@@ -2,6 +2,19 @@
   padding: 2rem;
 }
 
+/* Responsive padding for settings section */
+@media (max-width: 768px) {
+  .settings-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .settings-section {
+    padding: 0.5rem;
+  }
+}
+
 .card-header-red {
   background: #ff0000 !important;
   border: none;

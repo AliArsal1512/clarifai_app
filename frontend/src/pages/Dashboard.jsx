@@ -193,7 +193,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container-fluid dashboard-section" style={{ maxWidth: '1400px', width: '100%' }}>
+    <div className="container-fluid dashboard-section">
       <section>
         <div className="welcome-text align-self-start mb-4">
           <h2>Welcome, <span className="text-gradient">{username}</span></h2>

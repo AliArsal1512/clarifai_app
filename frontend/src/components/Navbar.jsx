@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <nav id="mainNavbar" className="navbar navbar-expand-lg fixed-top">
-      <div className="container-fluid" style={{ maxWidth: '1400px', width: '100%' }}>
+      <div className="container-fluid">
         <Link className="navbar-brand" to="/" onClick={closeNavbar}>
           ClarifAI
         </Link>

@@ -37,6 +37,23 @@
   transition: all 0.3s ease;
 }
 
+/* Responsive navbar brand */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
 [data-theme="dark"] .navbar-brand {
   background: linear-gradient(to right, #ff7777, #88aaff) !important;
   -webkit-background-clip: text !important;
@@ -50,6 +67,19 @@
   font-size: 1.2rem;
   transition: all 0.3s ease;
   color: var(--text-primary) !important;
+}
+
+/* Responsive nav links */
+@media (max-width: 768px) {
+  .nav-link {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-link {
+    font-size: 0.95rem;
+  }
 }
 
 .nav-link:hover {

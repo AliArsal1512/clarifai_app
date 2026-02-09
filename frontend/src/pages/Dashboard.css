@@ -7,6 +7,21 @@
   background-color: var(--bg-primary);
 }
 
+/* Responsive padding for dashboard section */
+@media (max-width: 768px) {
+  .dashboard-section {
+    padding: 1rem;
+    padding-top: 90px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-section {
+    padding: 0.5rem;
+    padding-top: 70px;
+  }
+}
+
 [data-theme="dark"] .dashboard-section {
   background-color: #2d2d2d;
 }

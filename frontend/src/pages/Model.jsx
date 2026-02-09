@@ -363,7 +363,7 @@ const Model = () => {
         </div>
       )}
       
-      <div className="container-fluid" style={{ maxWidth: '1400px', width: '100%' }}>
+      <div className="container-fluid">
         {!isSidebarOpen && (
           <button
             className="file-sidebar-toggle"

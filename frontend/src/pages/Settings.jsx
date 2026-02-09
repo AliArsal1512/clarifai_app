@@ -45,7 +45,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="container-fluid settings-section" style={{ maxWidth: '1400px', width: '100%' }}>
+    <div className="container-fluid settings-section">
       <section className="settings-section" style={{ paddingTop: '80px' }}>
         <div className="welcome-text mb-4">
           <h2>Settings</h2>

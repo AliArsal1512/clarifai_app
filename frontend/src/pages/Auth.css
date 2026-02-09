@@ -14,6 +14,14 @@
   position: relative;
 }
 
+/* Mobile responsive padding for auth pages */
+@media (max-width: 768px) {
+  .login-page,
+  .signup-page {
+    padding: 70px 12px 12px 12px;
+  }
+}
+
 .login-page::before,
 .signup-page::before {
   content: '';

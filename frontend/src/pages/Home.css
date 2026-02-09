@@ -13,6 +13,19 @@
   position: relative;
 }
 
+/* Responsive padding for hero section */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 3%;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 2%;
+  }
+}
+
 .hero-section::before {
   content: '';
   position: absolute;
