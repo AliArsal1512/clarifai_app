@@ -23,6 +23,7 @@ class Config:
     # Security settings
     SESSION_COOKIE_SECURE = os.environ.get('FLASK_ENV') == 'production'
     REMEMBER_COOKIE_SECURE = os.environ.get('FLASK_ENV') == 'production'
+    REMEMBER_COOKIE_NAME = 'remember_token'
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_HTTPONLY = True
 

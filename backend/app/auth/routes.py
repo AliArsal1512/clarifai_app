@@ -56,14 +56,26 @@ def signup(): #
         current_app.logger.error(f"Signup error: {e}")
         return jsonify({'success': False, 'error': 'An error occurred. Please try again.'}), 500
 
-@auth_bp.route('/logout') #
+@auth_bp.route('/logout', methods=['POST'])
 def logout():
-    logout_user()  # This clears the session
-    
-    # Create response
-    response = jsonify({'success': True, 'redirect': '/'})
-    
-    response.delete_cookie("remember_token")
-    response.delete_cookie("session")
-    
+    logout_user()
+
+    response = jsonify({'success': True})
+
+    response.delete_cookie(
+        'remember_token',
+        path='/',
+        domain='.onrender.com',
+        secure=True,
+        samesite='None'
+    )
+
+    response.delete_cookie(
+        'session',
+        path='/',
+        domain='.onrender.com',
+        secure=True,
+        samesite='None'
+    )
+
     return response
