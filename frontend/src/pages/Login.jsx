@@ -26,8 +26,12 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="log-sign-card card">
-        <p>Authentication will not work if the backend is not awake on Render.<br>For waking up the backend please visit<a> https://backend-clarifai.onrender.com/</a></br></p>
         <div className="card-body p-4">
+          <p>Authentication will not work if the backend is not awake on Render.
+            <br>For waking up the backend please visit 
+              <a href="https://backend-clarifai.onrender.com/" target="_blank" rel="noopener noreferrer"> https://backend-clarifai.onrender.com/</a>
+            </br>
+          </p>
           <h2 className="login-label text-center mb-4">Login</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
