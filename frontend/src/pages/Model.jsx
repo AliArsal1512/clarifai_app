@@ -420,9 +420,9 @@ const Model = () => {
                   </button>
                 </div>
               </div>
-              <div id="editorContainer" style={{ height: '450px', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
+              <div id="editorContainer" style={{ height: 'calc(100vh - 120px)', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
                 <Editor
-                  height="450px"
+                  height="calc(100vh - 120px)"
                   defaultLanguage="java"
                   value={code}
                   theme={theme === 'dark' ? 'vs-dark' : 'vs'}

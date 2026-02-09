@@ -73,6 +73,23 @@
   }
 }
 
+#editorContainer {
+  width: 100%;
+}
+
+/* Responsive editor height adjustments */
+@media (max-width: 768px) {
+  #editorContainer {
+    height: calc(100vh - 110px) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #editorContainer {
+    height: calc(100vh - 100px) !important;
+  }
+}
+
 .form-control {
   background-color: #ffffff !important;
   color: var(--text-primary) !important;
