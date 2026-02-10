@@ -27,9 +27,12 @@ const Login = () => {
     <div className="login-page">
       <div className="log-sign-card card">
         <div className="card-body p-4">
-          <p className="text-muted">Authentication will not work if the backend is not awake on Render.
-            <br />For waking up the backend please visit 
-              <a href="https://clarifai-app.onrender.com/" target="_blank" rel="noopener noreferrer"> https://clarifai-app.onrender.com/</a>
+          <p className="text-muted">
+            For demo purposes, you can use the following credentials:
+            <br />
+            Username: <code>ali123</code>
+            <br />
+            Password: <code>ali123</code>
           </p>
           <h2 className="login-label text-center mb-4">Login</h2>
           {error && <div className="alert alert-danger">{error}</div>}
