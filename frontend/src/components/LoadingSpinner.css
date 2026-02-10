@@ -4,8 +4,38 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: transparent;
   gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-spinner-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/images/body-bg9.png');
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.loading-spinner-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 1;
+}
+
+[data-theme="dark"] .loading-spinner-container::after {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .loading-spinner-icon {
@@ -16,6 +46,8 @@
   background-clip: text;
   animation: hourglass-spin 1.5s ease-in-out infinite;
   display: inline-block;
+  position: relative;
+  z-index: 2;
 }
 
 [data-theme="dark"] .loading-spinner-icon {
@@ -53,6 +85,8 @@
   text-align: center;
   max-width: 500px;
   line-height: 1.5;
+  position: relative;
+  z-index: 2;
 }
 
 .loading-text a {
