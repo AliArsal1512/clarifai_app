@@ -5,9 +5,8 @@ import './LoadingSpinner.css';
 const LoadingSpinner = () => {
   return (
     <div className="loading-spinner-container">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
+      <div className="loading-spinner-icon">⏳</div>
+      <p className="loading-text">waking up backend on render, please visit <a href="https://clarifai-app.onrender.com" target="_blank" rel="noopener noreferrer">https://clarifai-app.onrender.com</a> to see progress</p>
     </div>
   );
 };
