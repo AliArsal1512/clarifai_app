@@ -37,6 +37,6 @@ services:
 
 databases:
   - name: clarifai-db
-    databaseName: clarifai_db_490d
+    databaseName: clarifai_db_490d_g9vj
     user: clarifai_db_490d_user
     plan: free
