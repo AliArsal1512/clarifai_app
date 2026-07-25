@@ -34,9 +34,3 @@ services:
     envVars:
       - key: VITE_API_URL
         value: "https://clarifai-backend.onrender.com"
-
-databases:
-  - name: clarifai-db
-    databaseName: clarifai_db_490d_g9vj
-    user: clarifai_db_490d_user
-    plan: free
